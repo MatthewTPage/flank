@@ -8,6 +8,7 @@ import ftl.json.SavedMatrixTest.Companion.createResultsStorage
 import ftl.json.SavedMatrixTest.Companion.createStepExecution
 import ftl.json.SavedMatrixTest.Companion.testMatrix
 import ftl.json.createSavedMatrix
+import ftl.json.validate
 import ftl.run.cancelMatrices
 import ftl.test.util.FlankTestRunner
 import io.mockk.coEvery
@@ -92,7 +93,7 @@ class UtilsTest {
         }
         testMatrix.testExecutions = testExecutions
         val finishedMatrix = createSavedMatrix(testMatrix)
-        MatrixMap(mutableMapOf("finishedMatrix" to finishedMatrix), "MockPath").validateMatrices()
+        MatrixMap(mutableMapOf("finishedMatrix" to finishedMatrix), "MockPath").validate()
     }
 
     @Test
@@ -106,7 +107,7 @@ class UtilsTest {
         testMatrix.resultStorage = createResultsStorage()
         testMatrix.testExecutions = testExecutions
         val finishedMatrix = createSavedMatrix(testMatrix)
-        MatrixMap(mutableMapOf("" to finishedMatrix), "MockPath").validateMatrices()
+        MatrixMap(mutableMapOf("" to finishedMatrix), "MockPath").validate()
     }
 
     @Test(expected = MatrixCanceledError::class)
@@ -122,7 +123,7 @@ class UtilsTest {
         }
         testMatrix.testExecutions = testExecutions
         val finishedMatrix = createSavedMatrix(testMatrix)
-        MatrixMap(mutableMapOf("" to finishedMatrix), "MockPath").validateMatrices()
+        MatrixMap(mutableMapOf("" to finishedMatrix), "MockPath").validate()
     }
 
     @Test(expected = FTLError::class)
@@ -137,7 +138,7 @@ class UtilsTest {
         testMatrix.resultStorage = createResultsStorage()
         testMatrix.testExecutions = testExecutions
         val errorMatrix = createSavedMatrix(testMatrix)
-        MatrixMap(mutableMapOf("errorMatrix" to errorMatrix), "MockPath").validateMatrices()
+        MatrixMap(mutableMapOf("errorMatrix" to errorMatrix), "MockPath").validate()
     }
 
     @Test
@@ -154,7 +155,7 @@ class UtilsTest {
         testMatrix.testExecutions = testExecutions
         val finishedMatrix = createSavedMatrix(testMatrix)
         try {
-            MatrixMap(mutableMapOf("" to finishedMatrix), "MockPath").validateMatrices(shouldIgnore)
+            MatrixMap(mutableMapOf("" to finishedMatrix), "MockPath").validate(shouldIgnore)
         } catch (t: FailedMatrixError) {
             assertTrue(t.ignoreFailed)
         } catch (_: Throwable) {
